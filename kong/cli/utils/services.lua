@@ -112,7 +112,8 @@ function _M.stop_all(configuration, configuration_path)
   end
 end
 
-function _M.start_all(configuration, configuration_path)
+
+function _M.prepare_all(configuration, configuration_path)
   -- Prepare and check working directory
   local _, err = prepare_working_dir(configuration)
   if err then
@@ -125,14 +126,28 @@ function _M.start_all(configuration, configuration_path)
     return false, err
   end
 
+  local prepared_services = {}
+
   for _, v in ipairs(services) do
     local service = v(configuration, configuration_path)
     local ok, err
     ok, err = service:prepare()
-    if not ok then
-      return ok, err
+    if ok then
+      prepared_services[service._name] = service
     end
-    ok, err = service:start()
+  end
+
+  return prepared_services, nil
+end
+
+function _M.start_all(configuration, configuration_path)
+  local prepared_services, err = _M.prepare_all(configuration, configuration_path)
+  if err then
+    return false, err
+  end
+  
+  for _, service in pairs(prepared_services) do
+    local ok, err = service:start()
     if not ok then
       return ok, err
     end
