@@ -45,7 +45,8 @@ local function prepare_ssl_certificates(configuration)
     return false, err
   end
 
-  local trusted_ssl_cert_path = configuration.dao_config.ssl and
+  local trusted_ssl_cert_path = (type(configuration.dao_config.ssl) == "table") and
+                                configuration.dao_config.ssl and
                                 configuration.dao_config.ssl.certificate_authority or nil
 
   return {
