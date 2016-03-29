@@ -156,7 +156,7 @@ function Kong.init()
         error("Cannot autojoin cluster: SERF_NODE_NAME must be set when using KONG_EXTERNAL_SUPERVISE")
       end
       local Serf = require "kong.cli.services.serf"
-      local serf = Serf(configuration)
+      local serf = Serf(singletons.configuration)
 
       -- Auto-Join nodes
       local ok, err = serf:_autojoin(node_name)
