@@ -125,10 +125,6 @@ function PostgresDB:query(query, no_database)
   PostgresDB.super.query(self, query)
 
   local conn_opts = self:_get_conn_options()
-  if no_database then
-    conn_opts.database = "postgres"
-    conn_opts.user = "postgres"
-  end
   local pg = pgmoon.new(conn_opts)
   local ok, err = pg:connect()
   if not ok then
