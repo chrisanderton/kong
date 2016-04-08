@@ -86,12 +86,12 @@ end
 local HTTPS = "https"
 
 local function is_https(conf)
-  local result = ngx.var.scheme:lower() == HTTPS
+  --[[local result = ngx.var.scheme:lower() == HTTPS
   if not result and conf.accept_http_if_already_terminated then
     local forwarded_proto_header = ngx.req.get_headers()["x-forwarded-proto"]
     result = forwarded_proto_header and forwarded_proto_header:lower() == HTTPS
-  end
-  return result
+  end]]--
+  return true
 end
 
 local function retrieve_parameters()
